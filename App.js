@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 // Styles
 import './styles/global.css'
 // Components
@@ -14,14 +14,21 @@ function App() {
   const [menuStatus, setMenuStatus] = useState(false)
 
   const pathname = window.location.pathname
+  // PROTECTED_URLS המשתנה מוגדר על סמך האם שם הנתיב הנוכחי תואם לכל אחד מהנתיבים במערך .
   const isProtectedPage = PROTECTED_URLS.some(u => pathname.startsWith(u))
+
+  // header will not appear in signup and login page
+  const isLoginOrSignup = pathname === '/login' || pathname === '/signup' || pathname === '/'  ;
+
 
   return (
     <div className={`App ${isProtectedPage ? '' : 'non-protected'}`}>
       <BrowserRouter>
 
+      {isLoginOrSignup ? null : <Header setMenu={setMenuStatus} />}
+
         {/* header */}
-        <Header setMenu={setMenuStatus} />
+        {/* <Header setMenu={setMenuStatus} /> */}
 
         {/* menu : conditional rendering */}
         { menuStatus && <Menu /> }
